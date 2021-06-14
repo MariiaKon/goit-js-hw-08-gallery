@@ -63,3 +63,57 @@ const galleryItems = [
     description: 'Lighthouse Coast Sea',
   },
 ];
+
+const refs = {
+    gallery: document.querySelector('.js-gallery'),
+    overlay: document.querySelector('.lightbox__overlay'),
+    modal: document.querySelector('.js-lightbox'),
+    modalContent: document.querySelector('.lightbox__content'),
+    closeBtn: document.querySelector('[data-action="close-lightbox"]'),
+    originImage: document.querySelector('.lightbox__image'),
+}
+
+// создаем галерею
+let galleryArr = [];
+
+galleryItems.forEach(galleryItem => {
+    let imageItem = `<li class="gallery__item">
+        <a class="gallery__link" href="${galleryItem.original}">
+            <img class="gallery__image" 
+            src="${galleryItem.preview}"
+            data-source="${galleryItem.original}"
+            alt="${galleryItem.description}" />
+        </a>
+    </li>`
+
+    galleryArr.push(imageItem);
+});
+refs.gallery.insertAdjacentHTML('beforeend', galleryArr.join(''));
+
+
+
+const prewiewImage = document.querySelector('.gallery__image');
+
+prewiewImage.addEventListener('click', openModal); // слушатель клика по картинке
+refs.closeBtn.addEventListener('click', closeModal); // слушатель клика по кнопке закрытия
+refs.overlay.addEventListener('click', closeModal); // слушатель клика по оверлею
+document.addEventListener('keydown', (event) => { // слушатель на Esc
+    if (event.key === 'Escape') {
+        closeModal()
+    }
+});
+
+
+function openModal(event) {
+    event.preventDefault();
+    refs.modal.classList.add('is-open');
+
+    let modalImageSrc = prewiewImage.getAttribute('data-source');
+    refs.originImage.setAttribute('src', modalImageSrc); // меняем src картинки в модалке
+}
+
+function closeModal() {
+    if (refs.modal.classList.contains('is-open')) {
+        refs.modal.classList.remove('is-open');
+    }
+}
