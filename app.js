@@ -92,9 +92,8 @@ refs.gallery.insertAdjacentHTML('beforeend', galleryArr.join(''));
 
 
 
-const prewiewImage = document.querySelector('.gallery__image');
 
-prewiewImage.addEventListener('click', openModal); // слушатель клика по картинке
+refs.gallery.addEventListener('click', openModal); // слушатель клика по картинке
 refs.closeBtn.addEventListener('click', closeModal); // слушатель клика по кнопке закрытия
 refs.overlay.addEventListener('click', closeModal); // слушатель клика по оверлею
 document.addEventListener('keydown', (event) => { // слушатель на Esc
@@ -104,16 +103,21 @@ document.addEventListener('keydown', (event) => { // слушатель на Esc
 });
 
 
+
 function openModal(event) {
     event.preventDefault();
     refs.modal.classList.add('is-open');
 
-    let modalImageSrc = prewiewImage.getAttribute('data-source');
+    let modalImageSrc = event.target.getAttribute('data-source');
+    let modalImageAlt = event.target.getAttribute('alt');
     refs.originImage.setAttribute('src', modalImageSrc); // меняем src картинки в модалке
+    refs.originImage.setAttribute('alt', modalImageAlt); // меняем alt картинки в модалке
 }
 
 function closeModal() {
     if (refs.modal.classList.contains('is-open')) {
         refs.modal.classList.remove('is-open');
+        refs.originImage.removeAttribute('src');
+        refs.originImage.removeAttribute('alt');
     }
 }
